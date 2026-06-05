@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using ProjetoWeb.Models;
+using ProjetoWeb.Models.ViewModels;
 using System.Diagnostics;
 
 namespace ProjetoWeb.Controllers {
