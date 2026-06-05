@@ -1,3 +1,4 @@
+using ProjetoWeb.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
