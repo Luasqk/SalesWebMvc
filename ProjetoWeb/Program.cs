@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//pega a Connection String correta do appsettings.json
+// Pega a Connection String correta do appsettings.json
 var connectionString = builder.Configuration.GetConnectionString("ProjetoWebContext")
     ?? throw new InvalidOperationException("Connection string 'ProjetoWebContext' not found.");
 
-//configura o DbContext usando o MySql (Pomelo)
+// Configura o DbContext usando o MySql (Pomelo)
 builder.Services.AddDbContext<ProjetoWebContext>(options =>
     options.UseMySql(
         connectionString,
@@ -19,10 +19,27 @@ builder.Services.AddDbContext<ProjetoWebContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Registrar o SeedingService no sistema (Injeção de Dependência)
+builder.Services.AddScoped<SeedingService>();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+// ======================================================================
+// CONFIGURAÇÃO DO PIPELINE (O equivalente ao que o Nélio faz no Startup)
+// ======================================================================
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage(); // Tela de erro detalhada para o programador
+
+    // Criamos um escopo temporário para chamar o SeedingService com segurança
+    using (var scope = app.Services.CreateScope())
+    {
+        var seedingService = scope.ServiceProvider.GetRequiredService<SeedingService>();
+        seedingService.Seed(); // Alimenta o banco de dados se estiver vazio
+    }
+}
+else
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
@@ -38,4 +55,5 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+// O app.Run() DEVE ser a última linha executável do arquivo!
 app.Run();
