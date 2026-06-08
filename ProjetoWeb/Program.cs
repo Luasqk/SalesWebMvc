@@ -23,6 +23,7 @@ builder.Services.AddControllersWithViews();
 // Registrar o SeedingService no sistema (Injeção de Dependência)
 builder.Services.AddScoped<SeedingService>();
 builder.Services.AddScoped<SellerService>();
+builder.Services.AddScoped<DepartmentService>();
 
 var app = builder.Build();
 
