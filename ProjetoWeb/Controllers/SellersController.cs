@@ -19,5 +19,10 @@ namespace ProjetoWeb.Controllers
             var list = _sellerService.FindAll();
             return View(list);
         }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
     }
 }
