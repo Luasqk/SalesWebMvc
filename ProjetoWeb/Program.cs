@@ -1,8 +1,12 @@
-using ProjetoWeb.Data;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using ProjetoWeb.Data;
 using ProjetoWeb.Services;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// 1. CONFIGURAÇÃO DE SERVIÇOS (Tudo que usa builder.Services)
 
 // Pega a Connection String correta do appsettings.json
 var connectionString = builder.Configuration.GetConnectionString("ProjetoWebContext")
@@ -17,20 +21,33 @@ builder.Services.AddDbContext<ProjetoWebContext>(options =>
     )
 );
 
-// Add services to the container.
+// Add services to the container
 builder.Services.AddControllersWithViews();
 
-// Registrar o SeedingService no sistema (Injeção de Dependência)
+// Registrar os Services no sistema (Injeção de Dependência)
 builder.Services.AddScoped<SeedingService>();
 builder.Services.AddScoped<SellerService>();
 builder.Services.AddScoped<DepartmentService>();
 
+
+// 2. CONSTRUÇÃO DO APP (Gera a variável 'app')
 var app = builder.Build();
 
-// ========================
-// CONFIGURAÇÃO DO PIPELINE 
-// ========================
 
+// 3. CONFIGURAÇÃO DO PIPELINE DE REQUISIÇÃO (Tudo que usa 'app.Use...')
+
+// Configuração do Localization (Idioma padrão do sistema para en-US)
+var enUs = new CultureInfo("en-US");
+var localizationOptions = new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture(enUs),
+    SupportedCultures = new List<CultureInfo> { enUs },
+    SupportedUICultures = new List<CultureInfo> { enUs }
+};
+app.UseRequestLocalization(localizationOptions);
+
+
+// Configurações de ambiente (Development vs Production)
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage(); // Tela de erro detalhada para o programador
@@ -58,5 +75,5 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
-// O app.Run() DEVE ser a última linha executável do arquivo!
+// O app.Run() A última linha executável do arquivo!
 app.Run();
