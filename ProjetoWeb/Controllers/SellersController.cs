@@ -48,6 +48,12 @@ namespace ProjetoWeb.Controllers
         [ValidateAntiForgeryToken] // Trava de segurança contra ataques de falsificação de requisição (CSRF)
         public IActionResult Create(Seller seller)
         {
+            if (!ModelState.IsValid)
+            {
+                var departments = _departmentService.FindAll();
+                var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+                return View(viewModel);
+            }
             // Envia os dados preenchidos do vendedor para o serviço salvar no banco de dados
             _sellerService.Insert(seller);
             // Redireciona o usuário de volta para a tela de listagem (Index)
@@ -142,6 +148,14 @@ namespace ProjetoWeb.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Seller seller)
         {
+
+            if (!ModelState.IsValid)
+            {
+                var departments = _departmentService.FindAll();
+                var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+                return View(viewModel);
+            }
+
             // Segurança: Evita que os dados de um vendedor sejam salvos no ID de outro (Inconsistência de URL)
             if (id != seller.Id)
             {
