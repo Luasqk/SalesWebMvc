@@ -1,8 +1,11 @@
 ﻿using ProjetoWeb.Models;
 using ProjetoWeb.Data;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProjetoWeb.Services
 {
+
     public class DepartmentService
     {
 
@@ -13,9 +16,9 @@ namespace ProjetoWeb.Services
             _context = context;
         }
 
-        public List<Department> FindAll()
+        public async Task<List<Department>> FindAllAsync()
         {
-            return _context.Department.OrderBy(x  => x.Name ).ToList();
+            return await _context.Department.OrderBy(x => x.Name).ToListAsync();
         }
     }
 }
