@@ -24,9 +24,9 @@ builder.Services.AddScoped<SeedingService>();
 
 var app = builder.Build();
 
-// ======================================================================
-// CONFIGURAÇÃO DO PIPELINE (O equivalente ao que o Nélio faz no Startup)
-// ======================================================================
+// ========================
+// CONFIGURAÇÃO DO PIPELINE 
+// ========================
 
 if (app.Environment.IsDevelopment())
 {
