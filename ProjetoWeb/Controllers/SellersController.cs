@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProjetoWeb.Services;
+using ProjetoWeb.Models;
 
 namespace ProjetoWeb.Controllers
 {
@@ -22,7 +23,15 @@ namespace ProjetoWeb.Controllers
 
         public ActionResult Create()
         {
-            return View();
+            return View(); 
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Seller seller)
+        {
+            _sellerService.Insert(seller);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
