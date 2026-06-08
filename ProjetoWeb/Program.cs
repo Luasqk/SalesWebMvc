@@ -1,5 +1,6 @@
 using ProjetoWeb.Data;
 using Microsoft.EntityFrameworkCore;
+using ProjetoWeb.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services.AddControllersWithViews();
 
 // Registrar o SeedingService no sistema (Injeção de Dependência)
 builder.Services.AddScoped<SeedingService>();
+builder.Services.AddScoped<SellerService>();
 
 var app = builder.Build();
 
